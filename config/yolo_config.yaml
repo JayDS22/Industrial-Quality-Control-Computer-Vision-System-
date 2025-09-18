@@ -1,0 +1,236 @@
+# YOLOv8 Training Configuration for Quality Control
+
+# Model Configuration
+model:
+  architecture: "yolov8n.pt"  # yolov8n, yolov8s, yolov8m, yolov8l, yolov8x
+  input_size: 640
+  pretrained: true
+
+# Training Parameters
+training:
+  epochs: 100
+  batch_size: 16
+  learning_rate: 0.01
+  weight_decay: 0.0005
+  momentum: 0.937
+  patience: 50  # Early stopping patience
+  save_period: 10  # Save checkpoint every N epochs
+  
+  # Optimizer settings
+  optimizer: "SGD"  # SGD, Adam, AdamW
+  cos_lr: false  # Cosine learning rate scheduler
+  close_mosaic: 10  # Disable mosaic augmentation for last N epochs
+  
+  # Multi-GPU settings
+  device: "0"  # GPU device(s) to use
+  workers: 8  # Number of dataloader workers
+  
+  # Training modes
+  single_cls: false  # Train as single-class dataset
+  rect: false  # Rectangular training
+  resume: false  # Resume training from checkpoint
+
+# Dataset Configuration
+data:
+  # Dataset paths (relative to project root)
+  dataset_path: "datasets/qc_dataset"
+  train_path: "datasets/qc_dataset/images/train"
+  val_path: "datasets/qc_dataset/images/val"
+  test_path: "datasets/qc_dataset/images/test"
+  
+  # Label paths
+  train_labels: "datasets/qc_dataset/labels/train"
+  val_labels: "datasets/qc_dataset/labels/val"
+  test_labels: "datasets/qc_dataset/labels/test"
+  
+  # Class definitions
+  classes:
+    - "crack"
+    - "scratch"
+    - "dent"
+    - "discoloration"
+    - "contamination"
+  
+  # Dataset statistics
+  total_images: 10000
+  train_split: 0.7
+  val_split: 0.2
+  test_split: 0.1
+
+# Data Augmentation
+augmentation:
+  # HSV augmentation
+  hsv_h: 0.015  # HSV-Hue augmentation (fraction)
+  hsv_s: 0.7    # HSV-Saturation augmentation (fraction)
+  hsv_v: 0.4    # HSV-Value augmentation (fraction)
+  
+  # Geometric augmentation
+  degrees: 0.0      # Image rotation (+/- deg)
+  translate: 0.1    # Image translation (+/- fraction)
+  scale: 0.5        # Image scale (+/- gain)
+  shear: 0.0        # Image shear (+/- deg)
+  perspective: 0.0  # Image perspective (+/- fraction)
+  
+  # Flip augmentation
+  flipud: 0.0   # Image flip up-down (probability)
+  fliplr: 0.5   # Image flip left-right (probability)
+  
+  # Advanced augmentation
+  mosaic: 1.0   # Mosaic augmentation (probability)
+  mixup: 0.0    # MixUp augmentation (probability)
+  copy_paste: 0.0  # Copy-paste augmentation (probability)
+
+# Loss Configuration
+loss:
+  box: 7.5      # Box loss gain
+  cls: 0.5      # Class loss gain
+  dfl: 1.5      # Distribution focal loss gain
+  
+  # Focal loss parameters
+  fl_gamma: 0.0  # Focal loss gamma
+
+# Validation Settings
+validation:
+  val_period: 1  # Validate every N epochs
+  conf_threshold: 0.001  # Confidence threshold for validation
+  iou_threshold: 0.6     # IoU threshold for NMS during validation
+  max_det: 300          # Maximum detections per image
+  
+  # Validation metrics
+  save_json: true       # Save validation results as JSON
+  save_hybrid: false    # Save hybrid version of labels
+  
+  # Plotting
+  plots: true          # Save training plots
+  
+# Model Export Settings
+export:
+  formats:
+    - "onnx"
+    - "torchscript"
+    - "tensorrt"
+  
+  # Export parameters
+  imgsz: 640
+  half: false         # FP16 export
+  int8: false         # INT8 export
+  dynamic: false      # Dynamic shape export
+  simplify: false     # ONNX simplify
+  opset: 11          # ONNX opset version
+
+# Hyperparameter Evolution
+evolution:
+  enabled: false
+  generations: 300
+  population_size: 300
+  mutation_probability: 0.8
+  sigma: 0.2
+
+# Logging and Monitoring
+logging:
+  project: "runs/train"
+  name: "qc_yolo"
+  exist_ok: true
+  verbose: true
+  
+  # Weights & Biases integration
+  wandb:
+    enabled: false
+    project: "qc-yolo-training"
+    entity: "your-team"
+  
+  # TensorBoard logging
+  tensorboard: true
+
+# Model Pruning and Quantization
+optimization:
+  # Pruning settings
+  pruning:
+    enabled: false
+    sparsity: 0.3
+    structured: false
+  
+  # Quantization settings
+  quantization:
+    enabled: false
+    backend: "fbgemm"  # fbgemm, qnnpack
+    calibration_batches: 100
+
+# Transfer Learning
+transfer_learning:
+  # Freeze layers settings
+  freeze_layers: 10  # Number of layers to freeze
+  
+  # Fine-tuning schedule
+  unfreeze_schedule:
+    - epoch: 20
+      layers: [15, 16, 17]
+    - epoch: 40
+      layers: [12, 13, 14]
+    - epoch: 60
+      layers: "all"
+
+# Performance Targets
+targets:
+  # Accuracy targets
+  map50: 0.88      # mAP@0.5 target
+  map50_95: 0.75   # mAP@0.5-0.95 target
+  precision: 0.91  # Precision target
+  recall: 0.89     # Recall target
+  
+  # Speed targets
+  inference_time_ms: 150  # Target inference time
+  
+  # Size targets
+  model_size_mb: 50  # Target model size
+
+# Hardware Optimization
+hardware:
+  # CUDA settings
+  cuda_benchmark: true
+  cuda_deterministic: false
+  
+  # Memory optimization
+  amp: true          # Automatic Mixed Precision
+  profile: false     # Profile model
+  
+  # Distributed training
+  distributed:
+    enabled: false
+    backend: "nccl"
+    world_size: 1
+    rank: 0
+
+# Quality Control Specific Settings
+qc_specific:
+  # Defect detection thresholds
+  confidence_thresholds:
+    crack: 0.7
+    scratch: 0.6
+    dent: 0.8
+    discoloration: 0.5
+    contamination: 0.6
+  
+  # Class weights (for imbalanced dataset)
+  class_weights:
+    crack: 1.2
+    scratch: 1.0
+    dent: 1.5
+    discoloration: 0.8
+    contamination: 1.1
+  
+  # Post-processing
+  nms_threshold: 0.45
+  max_detections_per_image: 50
+  
+  # Severity classification
+  severity_rules:
+    critical:
+      min_confidence: 0.8
+      min_area_ratio: 0.05
+    major:
+      min_confidence: 0.6
+      min_area_ratio: 0.02
+    minor:
+      min_confidence: 0.4
+      min_area_ratio: 0.001
