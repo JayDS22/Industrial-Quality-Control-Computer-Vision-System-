@@ -4,7 +4,7 @@
 
 A comprehensive computer vision system for automated quality control in manufacturing environments, combining YOLOv8 object detection, ResNet-50 classification, and real-time processing capabilities for industrial-grade defect detection.
 
-## 🚀 Key Features
+## Key Features
 
 - **Multi-class defect detection** with 94.2% accuracy
 - **Real-time processing** of 500+ images/minute
@@ -13,7 +13,7 @@ A comprehensive computer vision system for automated quality control in manufact
 - **Automated anomaly detection**
 - **Production-ready Flask API**
 
-## 📊 Performance Metrics
+## Performance Metrics
 
 - **Overall Accuracy**: 94.2%
 - **mAP@0.5**: 88.7%
@@ -22,57 +22,31 @@ A comprehensive computer vision system for automated quality control in manufact
 - **Inference Time**: <150ms
 - **Model Size Reduction**: 60% (with TensorRT)
 
-## 🏗️ Architecture
+## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Industrial QC CV System                      │
-├─────────────────────────────────────────────────────────────────┤
-│  Input Layer                                                    │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
-│  │ Camera Feed │  │ Image Files │  │ Batch Input │             │
-│  └─────────────┘  └─────────────┘  └─────────────┘             │
-├─────────────────────────────────────────────────────────────────┤
-│  Preprocessing Pipeline                                         │
-│  ┌─────────────────────────────────────────────────────────────┐│
-│  │ Data Augmentation → Normalization → Resize → Quality Check ││
-│  └─────────────────────────────────────────────────────────────┘│
-├─────────────────────────────────────────────────────────────────┤
-│  AI/ML Processing Layer                                         │
-│  ┌─────────────────────┐    ┌─────────────────────┐             │
-│  │    YOLOv8 Model     │    │   ResNet-50 Model   │             │
-│  │  Object Detection   │    │   Classification    │             │
-│  │  - Defect Location  │    │  - Defect Category  │             │
-│  │  - Bounding Boxes   │    │  - Severity Level   │             │
-│  │  - Confidence Score │    │  - Quality Grade    │             │
-│  └─────────────────────┘    └─────────────────────┘             │
-├─────────────────────────────────────────────────────────────────┤
-│  Edge Computing Optimization                                   │
-│  ┌─────────────────────────────────────────────────────────────┐│
-│  │ TensorRT Optimization → Model Quantization → CUDA Acceleration││
-│  └─────────────────────────────────────────────────────────────┘│
-├─────────────────────────────────────────────────────────────────┤
-│  Post-Processing & Analytics                                   │
-│  ┌─────────────────────┐    ┌─────────────────────┐             │
-│  │  Image Segmentation │    │  Statistical Analysis│             │
-│  │  - Defect Masking   │    │  - SPC Charting     │             │
-│  │  - Area Calculation │    │  - Trend Analysis   │             │
-│  │  - Contour Detection│    │  - Anomaly Detection│             │
-│  └─────────────────────┘    └─────────────────────┘             │
-├─────────────────────────────────────────────────────────────────┤
-│  API & Integration Layer                                        │
-│  ┌─────────────────────────────────────────────────────────────┐│
-│  │          Flask REST API + WebSocket Real-time              ││
-│  └─────────────────────────────────────────────────────────────┘│
-├─────────────────────────────────────────────────────────────────┤
-│  Output & Monitoring                                           │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐             │
-│  │ Web Dashboard│  │ SPC Charts  │  │ Alert System│             │
-│  │ - Real-time  │  │ - Control   │  │ - Email/SMS │             │
-│  │ - Historical │  │   Limits    │  │ - Logging   │             │
-│  │ - Analytics  │  │ - Trends    │  │ - Reports   │             │
-│  └─────────────┘  └─────────────┘  └─────────────┘             │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    classDef in fill:#1d2a3a,stroke:#58a6ff,stroke-width:2px,color:#e6edf3
+    classDef ml fill:#1f2a23,stroke:#3fb950,stroke-width:2px,color:#e6edf3
+    classDef edge fill:#1a1a2e,stroke:#c084fc,stroke-width:2px,color:#e6edf3
+    classDef out fill:#2a2520,stroke:#c9a227,stroke-width:2px,color:#e6edf3
+
+    I[Input<br/>camera feed · files · batch]:::in
+    P[Preprocessing<br/>augment → normalize → resize → QC]:::ml
+    M[Detection + Classification<br/>YOLOv8 + ResNet-50]:::ml
+    E[Edge Optimization<br/>TensorRT · INT8 quant · CUDA]:::edge
+    A[Analytics<br/>segmentation · SPC · anomaly]:::ml
+    API[Flask REST + WebSocket]:::out
+    O[Dashboard + Alerts<br/>real-time · SPC charts · email/SMS]:::out
+
+    I --> P --> M --> E --> A --> API --> O
+
+    click M href "models" "ML models"
+    click P href "data_processing" "Preprocessing"
+    click E href "inference" "Inference engine"
+    click A href "analytics" "Analytics"
+    click API href "api" "REST API"
+    click O href "dashboard" "Dashboard"
 ```
 
 ### System Components
@@ -97,7 +71,7 @@ A comprehensive computer vision system for automated quality control in manufact
    - Real-time anomaly detection
    - Trend analysis and reporting
 
-## 🛠️ Installation
+## Installation
 
 ### Prerequisites
 
@@ -129,7 +103,7 @@ A comprehensive computer vision system for automated quality control in manufact
    # Edit config.yaml with your settings
    ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Training Models
 
@@ -168,7 +142,7 @@ A comprehensive computer vision system for automated quality control in manufact
    curl -X POST -F "images=@batch.zip" http://localhost:5000/api/batch_detect
    ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 industrial-qc-cv-system/
@@ -223,7 +197,7 @@ industrial-qc-cv-system/
     └── edge/                  # Edge deployment scripts
 ```
 
-## 🔧 Configuration
+## Configuration
 
 Edit `config/config.yaml`:
 
@@ -258,7 +232,7 @@ alerts:
   webhook_url: "https://your-webhook.com/alerts"
 ```
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run all tests
@@ -272,7 +246,7 @@ python -m pytest tests/test_api.py -v
 python scripts/benchmark.py
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Docker Deployment
 
@@ -294,7 +268,7 @@ python deployment/edge/optimize_for_edge.py
 python deployment/edge/deploy.py --device jetson_nano
 ```
 
-## 📊 Performance Monitoring
+## Performance Monitoring
 
 The system includes comprehensive monitoring:
 
@@ -304,7 +278,7 @@ The system includes comprehensive monitoring:
 - Quality control statistics
 - Alert management
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -312,11 +286,11 @@ The system includes comprehensive monitoring:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - YOLOv8 by Ultralytics
 - ResNet by Microsoft Research
@@ -326,4 +300,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ for Industrial Quality Control**
+**Built with for Industrial Quality Control**
